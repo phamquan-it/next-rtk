@@ -7,9 +7,9 @@ const Page: React.FC = () => {
 
   const handleLogin = async (values: { email: string; password: string }) => {
     try {
-      const result = await login(values).unwrap();
+      const result:any = await login(values).unwrap();
       // Store the token in localStorage
-      localStorage.setItem('authToken', result.token);
+      localStorage.setItem('authToken', result.accessToken);
       // Optionally redirect or update UI
       console.log("ok");
       

@@ -4,7 +4,16 @@ import { Login, Register } from '../models/auth.model';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: AUTOLIVE_URL }),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: AUTOLIVE_URL,
+        prepareHeaders: (headers) => {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`);
+            }
+            return headers;
+        },
+    }),
     endpoints: (builder) => ({
         login: builder.mutation<{ token: string }, Login>({
             query: (credentials) => ({
@@ -33,6 +42,13 @@ export const authApi = createApi({
                 method: 'POST',
                 body: refresh,
             }),
+        }),
+        getUserInfo: builder.query<any, void>({
+            query: ()=>({
+                url:"/auth/profile",
+                method:"GET",
+                
+            })
         })
     }),
 });
@@ -41,5 +57,6 @@ export const {
     useLoginMutation,  
     useRegisterMutation, 
     useForgotMutation, 
-    useRefreshTokenMutation  
+    useRefreshTokenMutation,
+    useGetUserInfoQuery
 } = authApi;
